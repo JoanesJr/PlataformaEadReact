@@ -1,0 +1,18 @@
+.btn {
+    width: 10vw;
+    height: 5vh;
+    background-color: #40C0DD;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 1px black;
+    transition: ease 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    color: white;
+    font-weight: bold;
+    box-shadow: 1px 1px 5px 1px white;
+}
