@@ -3,11 +3,18 @@
 }
 
 .corpo {
-  height: 80vh;
+  height: 88vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(7, 5, 102, 1) 37%, rgba(0, 212, 255, 1) 100%);
 
+}
+
+.active {
+  background-color: rgb(6, 6, 71);
+  font-weight: bold;
 }
 
 .App-logo {

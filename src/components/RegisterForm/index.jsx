@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import style from "./form.module.css";
-import Button from "../Button";
-import Users from '../../api/User';
+import Button from "../Button/index.jsx";
 import Errors from '../Errors/Errors';
+import api from "../../api/api";
 
 const RegisterForm = () => {
 
@@ -15,6 +15,7 @@ const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+
   const handleForm = e => {
     e.preventDefault();
     const data = {
@@ -25,18 +26,8 @@ const RegisterForm = () => {
       email,
     };
 
-    const register = async data => {
-      let create = await Users.create(data);
-      if (create.errors) {
-        setErrors(create.errors);
-        setSuccess(null)
-        setError(null);
-      }else {
-        if (create.error) {
-        setErrors(null);
-        setSuccess(null);
-        setError(create.error);
-      } else {
+    const register = data => {
+      let create = api.post("user", data).then(data => {
         setSuccess("Usuário criado com sucesso");
         setErrors(null);
         setError(null);
@@ -45,9 +36,20 @@ const RegisterForm = () => {
         setEmail("");
         setPassword("");
         setBirth("");
-      }
-        
-      }
+      }).catch(({response}) => {
+        console.log(response.data)
+        if (response.data.errors) {
+        setErrors(response.data.errors);
+        setSuccess(null)
+        setError(null);
+      }else {
+        if (response.data.error) {
+        setErrors(null);
+        setSuccess(null);
+        setError(response.data.error);
+        }}
+      });
+      
     }
 
 
@@ -55,7 +57,7 @@ const RegisterForm = () => {
   }
 
   return (
-    <main className={style.corpo}>
+    <main className="corpo">
       <div className={style.containerLogo}>
         <div className={style.logo}>
           <div className={style.imgContainer}>

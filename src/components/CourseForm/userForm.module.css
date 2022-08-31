@@ -1,5 +1,5 @@
-
-input:focus, input:hover {
+input:focus,
+input:hover {
     box-shadow: 0 0 0 0;
     border: 0 none;
     outline: 0;
@@ -7,7 +7,7 @@ input:focus, input:hover {
     font-weight: bold;
 }
 
-.containerLogo .containerForm{
+.containerLogo .containerForm {
     display: flex;
     justify-content: center;
     align-items: center;

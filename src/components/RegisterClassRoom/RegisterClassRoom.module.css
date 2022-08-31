@@ -1,0 +1,238 @@
+input:focus,
+input:hover {
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+    transform: scale(1.1);
+    font-weight: bold;
+}
+
+.containerLogo .containerForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    width: 35vw;
+    background-color: white;
+    height: 40vh;
+    border-top-left-radius: 18%;
+    border-bottom-left-radius: 18%;
+}
+
+.formContainer {
+    width: 40vw;
+    background-color: white;
+    height: 60vh;
+    border-radius: 3%;
+    box-shadow: 1px 1px 15px 3px black;
+}
+
+.imgContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+}
+
+.imgLogo {
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.errors {
+    text-align: left;
+    width: 88%;
+}
+
+.formGroup {
+    background-color: #40C0DD;
+    display: block;
+    padding: 10px;
+    width: 85%;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.transparent {
+    background-color: transparent;
+    text-align: center;
+}
+
+.text_success {
+    color: green;
+}
+
+.containerCheckbox {
+    /* background-color: red; */
+    display: flex;
+   flex-direction: line;
+   flex-wrap: wrap;
+   /* overflow: hidden; */
+   justify-content: flex-start;
+   align-items: flex-start; 
+   width: 100%;
+   height: 100%;
+}
+
+
+.openModal {
+    width: 8vw;
+        height: 3vh;
+        background-color: #40C0DD;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 1px 1px 5px 1px black;
+        transition: ease 0.3s;
+        cursor: pointer;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
+
+.openModal:hover {
+    transform: scale(1.05);
+        color: white;
+        font-weight: bold;
+        box-shadow: 1px 1px 5px 1px white;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.btnContainer div {
+    margin: 10px;
+}
+
+.btnContainer div button {
+    border-radius: 5px;
+    /* background-color: #40C0DD; */
+    width: 100px;
+    font-weight: bolder;
+    transition: ease 0.3s;
+}
+
+.btnContainer div button:hover {
+    transform: scale(1.1);
+    color: white;
+    font-weight: bolder;
+}
+
+.success {
+    background-color: #40C0DD;
+}
+
+.danger {
+    background-color: #dd4040;
+}
+
+.name {
+    margin-left: 25px;
+}
+
+.containerCheckbox label {
+    /* background-color: gray; */
+    padding: 5px;
+    /* margin-right: 8px; */
+}
+
+.containerCheckbox .checkboxDiv {
+    /* background-color: blue; */
+    margin-right: 10px;
+}
+
+.container {
+    display: block;
+    position: relative;
+    /* margin-bottom: 12px;  */
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* Esconder o checkbox padrão */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Criar o checkbox customizado */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 15px;
+    transition: ease-out 0.5s;
+}
+
+/* Adicionar uma cor de fundo cinza ao passar o mouse */
+.container:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+/* Quando o checkbox é clicado, adicionar um fundo rosa */
+.container input:checked~.checkmark {
+    background-color: #40C0DD;
+}
+
+/* Criar o ícone de check, escondido quando não estiver selecionado */
+.container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* Exibir o ícone quando selecionado */
+.container input:checked~.checkmark:after {
+    display: block;
+}
+
+.formGroup label {
+    color: rgb(57, 56, 56);
+    font-size: 14px;
+}
+
+.formGroup input {
+    height: 100%;
+    width: 60%;
+    background-color: #40C0DD;
+    color: #006386;
+    border: none;
+    transition: ease 0.3s;
+    margin-left: 15px;
+}
+
+.form h3 {
+    color: blue;
+}
