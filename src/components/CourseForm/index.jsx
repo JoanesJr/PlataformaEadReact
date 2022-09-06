@@ -52,7 +52,7 @@ const UserForm = () => {
       <div className="formContainer">
         <div className={style.formContainer}>
           <form className={style.form} onSubmit={handleForm}>
-            <h3>REGISTRE-SE</h3>
+            <h3>CADASTRAR CURSO</h3>
             {errors && (
               <div className={style.errors}>
                 <Errors errors={errors} error={error} />

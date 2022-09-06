@@ -46,10 +46,11 @@ const RegisterClassRoom = () => {
     
     const handleCloseModel = () => {
         setIsOpen(false);
+        setSelectCourses([]);
     }
     
     const handleChooseModal = () => {
-
+      setIsOpen(false);
     }
 
     const customStyles = {
@@ -76,6 +77,7 @@ const RegisterClassRoom = () => {
 
 
        const register = async (data) => {
+        let id = [];
          let create = api
            .post("classroom", data)
            .then(({data}) => {
@@ -85,17 +87,19 @@ const RegisterClassRoom = () => {
              setName("");
              setDescription("");
              setFileName("");
+             setSelectCourses([]);
+             selectCourses.map((value) => {
+               let trasnform = { id: value };
+               id.push(trasnform);
+             });
+    
+            let courses = {
+              course: id
+            };
 
-            let teste = {
-                course: [
-                    {
-                        id: 1
-                    }
-                ]
-            }
 
              let addCourse = api
-               .put(`classroom/${data.id}`, teste)
+               .put(`classroom/${data.id}`, courses)
                .then((data) => {
                  console.log(data);
                })
@@ -113,6 +117,7 @@ const RegisterClassRoom = () => {
                  setErrors(null);
                  setSuccess(null);
                  setError(response.data.error);
+                 
                }
              }
            });
@@ -123,12 +128,23 @@ const RegisterClassRoom = () => {
        register(data);
      };
 
+     const handleCheckbox = ({target}) => {
+      let listCourse = [...selectCourses];
+      if (target.checked) {
+        listCourse.push(target.value);
+        setSelectCourses(listCourse);
+      } else {
+        let newListCourse = selectCourses.filter( (element, index, arr) => arr[index] != target.value)
+        setSelectCourses (newListCourse);
+      }  
+     }
+
     return (
       <main className="corpo">
         <div className="formContainer">
           <div className={style.formContainer}>
             <form className={style.form} onSubmit={handleForm}>
-              <h3>REGISTRE-SE</h3>
+              <h3>CADASTRAR AULA</h3>
               {errors && (
                 <div className={style.errors}>
                   <Errors errors={errors} error={error} />
@@ -204,7 +220,12 @@ const RegisterClassRoom = () => {
                 {courses.map((value) => (
                   <div className={style.checkboxDiv}>
                     <label Key={value.id} className={style.container}>
-                      <input type="checkbox" className={style.checkbox}></input>
+                      <input
+                        type="checkbox"
+                        className={style.checkbox}
+                        onChange={(event) => handleCheckbox(event)}
+                        value={value.id}
+                      ></input>
                       <span className={style.checkmark}></span>
                       <span className={style.name}>{value.name}</span>
                     </label>
@@ -216,10 +237,20 @@ const RegisterClassRoom = () => {
 
           <div className={style.btnContainer}>
             <div>
-              <button onClick={() => handleChooseModal()} className={style.success}>Selecionar</button>
+              <button
+                onClick={() => handleChooseModal()}
+                className={style.success}
+              >
+                Selecionar
+              </button>
             </div>
             <div>
-              <button className={style.danger} onClick={() => handleCloseModel()}>Cancelar</button>
+              <button
+                className={style.danger}
+                onClick={() => handleCloseModel()}
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </Modal>

@@ -19,10 +19,10 @@ const Header = () => {
             <h2>ReactNavbar</h2>
           </div>
           <div>
-            <NavLink to="/aula" className={style.menu}>
+            <NavLink to="/aula/criar" className={style.menu}>
               Aula
             </NavLink>
-            <NavLink to="/curso" className={style.menu}>
+            <NavLink to="/curso/criar" className={style.menu}>
               Cursos
             </NavLink>
             <NavLink to="/" className={style.menu}>
