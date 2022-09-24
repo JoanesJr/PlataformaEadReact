@@ -4,17 +4,15 @@ import Button from "../Button/index.jsx";
 import Errors from '../Errors/Errors';
 import api from "../../api/api";
 
-const RegisterForm = () => {
-
+const RegisterForm = ({id, edit, labelButton}) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [birth, setBirth] = useState(5);
+  const [birth, setBirth] = useState("");
   const [errors, setErrors] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-
 
   const handleForm = e => {
     e.preventDefault();
@@ -51,10 +49,56 @@ const RegisterForm = () => {
       });
       
     }
+    const update = data => {
+      let create = api.put(`user/${id}`, data).then(data => {
+        setSuccess("Usuário alterado com sucesso");
+        setErrors(null);
+        setError(null);
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setBirth("");
+      }).catch(({response}) => {
+        console.log(response.data)
+        if (response.data.errors) {
+        setErrors(response.data.errors);
+        setSuccess(null)
+        setError(null);
+      }else {
+        if (response.data.error) {
+        setErrors(null);
+        setSuccess(null);
+        setError(response.data.error);
+        }}
+      });
+      
+    }
 
-
-    register(data);
+    if(edit) {
+      update(data);
+    } else {
+      register(data);
+    }
   }
+
+  useEffect( () => {
+    const get = () => {
+      api
+        .get(`user/${id}`)
+        .then(({ data }) => {
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
+          setEmail(data.email);
+          setPassword(data.password);
+          setBirth(data.birth);
+
+        })
+        .catch((err) => console.log(err));
+    };
+
+    get();
+  },[]); 
 
   return (
     <main className="corpo">
@@ -75,12 +119,12 @@ const RegisterForm = () => {
             <h3>REGISTRE-SE</h3>
             {errors && (
               <div className={style.errors}>
-                <Errors errors={errors} error={error}/>
+                <Errors errors={errors} error={error} />
               </div>
             )}
             {error && (
               <div className={style.errors}>
-                <Errors errors={errors} error={error}/>
+                <Errors errors={errors} error={error} />
               </div>
             )}
             {success && (
@@ -121,17 +165,19 @@ const RegisterForm = () => {
                 ></input>
               </label>
             </div>
-            <div className={style.formGroup}>
-              <label>
-                Senha:{" "}
-                <input
-                  type="password"
-                  placeholder="Informe sua senha"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                ></input>
-              </label>
-            </div>
+            {!edit && (
+              <div className={style.formGroup}>
+                <label>
+                  Senha:{" "}
+                  <input
+                    type="password"
+                    placeholder="Informe sua senha"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                  ></input>
+                </label>
+              </div>
+            )}
             <div className={style.formGroup}>
               <label>
                 Nascimento:{" "}
@@ -143,7 +189,8 @@ const RegisterForm = () => {
               </label>
             </div>
             <div className={`${style.formGroup} ${style.transparent}`}>
-              <Button text="Cadastre-se" />
+              
+              <Button text={labelButton} />
             </div>
           </form>
         </div>

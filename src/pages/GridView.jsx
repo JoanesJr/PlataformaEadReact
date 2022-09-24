@@ -6,10 +6,10 @@ import { Button, Icon, ButtonGroup } from "@mui/material";
 import { useNavigate } from "react-router";
 import ModalPage from "../components/ModalPage";
 import RegisterForm from "../components/RegisterForm";
-// import Modal from "react-modal";
-import style from "../components/RegisterClassRoom/RegisterClassRoom.module.css";
-
-// Modal.setAppElement("#root");
+import CourseForm from "../components/CourseForm";
+import RegisterClassRoom from "../components/RegisterClassRoom";
+import { useGridRow } from "../providers/GridContext";
+import ConfirmDelete from "../components/ConfirmDelete";
 
 const ButtonGrid = ({label, icon, to, onClick}) => {
   const navigate = useNavigate();
@@ -22,17 +22,38 @@ const ButtonGrid = ({label, icon, to, onClick}) => {
 }
 
 const GridViewScreen = ({screen}) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  const handleOpenModel = () => {
-    setIsOpen(true);
+  const { selectedRow } = useGridRow();
+  const [modalIsOpenEdit, setIsOpenEdit] = useState(false);
+  const [modalIsOpenDelete, setIsOpenDelete] = useState(false);
+  const [modalIsOpenNew, setIsOpenNew] = useState(false);
+  const handleOpenModal = (type) => {
+    type == "edit" && setIsOpenEdit(true);
+    type == "delete" && setIsOpenDelete(true);
+    type == "new" && setIsOpenNew(true);
   };
 
-  const handleCloseModel = () => {
-    setIsOpen(false);
+  const handleCloseModal = (type) => {
+    type == "edit" && setIsOpenEdit(false);
+    type == "delete" && setIsOpenDelete(false);
+    type == "new" && setIsOpenNew(false);
   };
 
   const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "rgb(62, 62, 77)",
+    },
+    overlay: {
+      backgroundColor: "rgb(7, 7, 7)",
+    },
+  };
+
+  const customStylesDelete = {
     content: {
       top: "50%",
       left: "50%",
@@ -74,22 +95,78 @@ const GridViewScreen = ({screen}) => {
                 label="EDITAR"
                 icon="edit"
                 to=""
-                onClick={(e) => handleOpenModel()}
+                onClick={(e) => handleOpenModal("edit")}
               />
-              <ButtonGrid label="EXCLUIR" icon="clear" to="" />
+              <ButtonGrid
+                label="EXCLUIR"
+                icon="clear"
+                to=""
+                onClick={(e) => handleOpenModal("delete")}
+              />
               <ButtonGrid label="VISUALIZAR" icon="visibility" to="" />
-              <ButtonGrid label="NOVO" icon="add" to="/curso/criar" />
+              <ButtonGrid
+                label="NOVO"
+                icon="add"
+                onClick={(e) => handleOpenModal("new")}
+              />
             </ButtonGroup>
           </Box>
           <GridView type={screen} />
         </Box>
+
+        {/* MODALS */}
+        {/* EDIT */}
         <ModalPage
-          open={modalIsOpen}
-          close={handleCloseModel}
+          open={modalIsOpenEdit}
+          close={() => handleCloseModal("edit")}
           styleModal={customStyles}
           labelClose="Cancelar"
         >
-          <RegisterForm />
+          {screen == "user" && (
+            <RegisterForm id={selectedRow} edit={true} labelButton="Editar" />
+          )}
+          {screen == "course" && (
+            <CourseForm id={selectedRow} edit={true} labelButton="Editar" />
+          )}
+          {screen == "classroom" && (
+            <RegisterClassRoom
+              id={selectedRow}
+              edit={true}
+              labelButton="Editar"
+            />
+          )}
+        </ModalPage>
+
+        {/* NEW */}
+        <ModalPage
+          open={modalIsOpenNew}
+          close={() => handleCloseModal("new")}
+          styleModal={customStyles}
+          labelClose="Cancelar"
+        >
+          {screen == "user" && (
+            <RegisterForm id={undefined} edit={false} labelButton="Adicionar" />
+          )}
+          {screen == "course" && (
+            <CourseForm id={undefined} edit={false} labelButton="Adicionar" />
+          )}
+          {screen == "classroom" && (
+            <RegisterClassRoom
+              id={undefined}
+              edit={false}
+              labelButton="Adicionar"
+            />
+          )}
+        </ModalPage>
+
+        {/* CONFIRMED DELETE */}
+        <ModalPage
+          open={modalIsOpenDelete}
+          close={() => handleCloseModal("delete")}
+          styleModal={customStylesDelete}
+          labelClose="Cancelar"
+        >
+          <ConfirmDelete id={selectedRow} url={screen} />
         </ModalPage>
       </Box>
     </div>

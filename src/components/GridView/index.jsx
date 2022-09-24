@@ -2,16 +2,17 @@ import React, {useEffect} from "react";
 import api from "../../api/api";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import { useState } from "react";
+import { useGridRow } from "../../providers/GridContext";
 
 
 const GridView = ({type}) => {
 
     const [list, setList] = useState([]);
     const [pageSize, setPageSize] = useState(5);
-    const [selectRow, setSelectRow] = useState();
+    const {setSelectedRow} = useGridRow();
 
     const handleRow = event => {
-      setSelectRow(event.id)
+      setSelectedRow(event.id)
     }
 
     let makeList = [];

@@ -1,34 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./userForm.module.css";
 import Button from "../Button";
 import Errors from "../Errors/Errors";
 import api from "../../api/api";
 
-const UserForm = () => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [filename, setFileName] = useState("");
-    const [errors, setErrors] = useState(null);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+const UserForm = ({ id, edit, labelButton }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [filename, setFileName] = useState("");
+  const [errors, setErrors] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-    const handleForm = (e) => {
-      e.preventDefault();
-      const data = new FormData();
-      data.append('name', name);
-      data.append("description", description);
-      data.append("file", filename);
+  const handleForm = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("name", name);
+    data.append("description", description);
+    data.append("file", filename);
 
-      const register = async (data) => {
-        // let create = await Course.create(data);
-        let create = api.post("course", data).then(data => {
+    const register = async (data) => {
+      // let create = await Course.create(data);
+      let create = api
+        .post("course", data)
+        .then((data) => {
           setSuccess("Usuário criado com sucesso");
           setErrors(null);
           setError(null);
           setName("");
           setDescription("");
           setFileName("");
-        }).catch(({response}) => {
+        })
+        .catch(({ response }) => {
           if (response.data.errors) {
             setErrors(response.data.errors);
             setSuccess(null);
@@ -39,16 +42,61 @@ const UserForm = () => {
               setSuccess(null);
               setError(response.data.error);
             }
-}
-        })
-      };
-
-      register(data);
+          }
+        });
     };
+
+    const update = (data) => {
+      let create = api
+        .put(`course/${id}`, data)
+        .then((data) => {
+          setSuccess("Usuário alterado com sucesso");
+          setErrors(null);
+          setError(null);
+          setName("");
+          setDescription("");
+          setFileName("");
+        })
+        .catch(({ response }) => {
+          console.log(response.data);
+          if (response.data.errors) {
+            setErrors(response.data.errors);
+            setSuccess(null);
+            setError(null);
+          } else {
+            if (response.data.error) {
+              setErrors(null);
+              setSuccess(null);
+              setError(response.data.error);
+            }
+          }
+        });
+    };
+
+    if (edit) {
+      update(data);
+    } else {
+      register(data);
+    }
+  };
+
+  useEffect(() => {
+    const get = () => {
+      api
+        .get(`course/${id}`)
+        .then(({ data }) => {
+          setName(data.name);
+          setDescription(data.description);
+          setFileName(data.fileName);
+        })
+        .catch((err) => console.log(err));
+    };
+
+    get();
+  }, []);
 
   return (
     <main className="corpo">
-      
       <div className="formContainer">
         <div className={style.formContainer}>
           <form className={style.form} onSubmit={handleForm}>
@@ -91,11 +139,17 @@ const UserForm = () => {
               </label>
             </div>
             <div className={style.formGroup}>
-             <input type="file" name="filename" id="filename" onChange={e=> setFileName(e.target.files[0])} />
+              <input
+                type="file"
+                name="filename"
+                id="filename"
+                onChange={(e) => setFileName(e.target.files[0])}
+              />
             </div>
-           
+
             <div className={`${style.formGroup} ${style.transparent}`}>
-              <Button text="Cadastre-se" />
+              {console.log(filename)}
+              <Button text={labelButton} />
             </div>
           </form>
         </div>
